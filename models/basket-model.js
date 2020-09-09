@@ -10,7 +10,7 @@ const basketSchema = new Schema({
     },
     content: {
         type: Array,
-        required: [true, 'Delivery points required']
+        required: [true, 'Content required']
     },
     active: {
         type: Boolean,

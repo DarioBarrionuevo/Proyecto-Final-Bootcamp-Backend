@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
+var ObjectId = require("mongodb").ObjectID;
 const Schema = mongoose.Schema;
 
 
+
 const orderSchema = new Schema({
-    user_name: {
+    user_id: {
         type: ObjectId,
         ref: 'User'
         //traigo todo y dejo nombre apellidos telefono y correo, cambiar el nombre  a usuario o algo asi

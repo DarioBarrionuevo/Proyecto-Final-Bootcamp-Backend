@@ -36,8 +36,12 @@ const userSchema = new Schema({
     },
     zip_code: {
         type: String,
-        //validacion
+        match: [/0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}/, 'Please insert a valid zip code number'],
         required: [true, 'Zip code required']
+    },
+    permits: {
+        type: String,
+        default: 'user',
     }
 
 });

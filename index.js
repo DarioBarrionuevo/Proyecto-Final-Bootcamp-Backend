@@ -1,6 +1,9 @@
 require('dotenv').config();
 const express = require('express');
-const userRouter = require('./routes/user-route')
+const userRouter = require('./routes/user-route');
+const organizationRouter = require('./routes/organization-route');
+const basketRouter = require('./routes/basket-route');
+const orderRouter = require('./routes/order-route');
 const cors = require("cors");
 
 const app = express();
@@ -15,7 +18,11 @@ app.use(express.urlencoded({
 }));
 
 // Routes
-app.use('/users', userRouter)
+app.use('/users', userRouter);
+app.use('/organizations', organizationRouter);
+app.use('/baskets', basketRouter);
+app.use('/orders', orderRouter);
+
 
 // Run app
 app.listen(app.get('port'), () => console.log('Running on ', app.get('port')));
