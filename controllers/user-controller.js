@@ -7,7 +7,7 @@ const UserModel = require('../models/user-model');
 mongoose.connect(`mongodb://localhost:27017/${process.env.DDBB_NAME}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
 });
 
 // MAIN
@@ -39,7 +39,7 @@ module.exports = {
             });
         } catch (error) {
             console.log(error);
-            res.status(500).send("It has been an error");
+            res.status(500).send("There has been an error");
         }
     },
     userLogin: async function (req, res) {
@@ -84,7 +84,7 @@ module.exports = {
             });
         } catch (error) {
             console.log(error);
-            res.status(500).send("It has been an error");
+            res.status(500).send("There has been an error");
         }
     },
     getAllUsers: async function (req, res) {
@@ -97,7 +97,7 @@ module.exports = {
 
         } catch (error) {
             console.log(error);
-            res.send("It has been an error");
+            res.send("There has been an error");
         }
 
     },
@@ -115,7 +115,7 @@ module.exports = {
 
         } catch (error) {
             console.log(error);
-            res.send("It has been an error");
+            res.send("There has been an error");
         }
 
     },
@@ -150,7 +150,7 @@ module.exports = {
 
         } catch (error) {
             console.log(error);
-            res.send("It has been an error");
+            res.send("There has been an error");
         }
 
     },
@@ -164,7 +164,7 @@ module.exports = {
                 phone_number,
                 zip_code
             } = req.body;
-            const oneUser = await UserModel.findByIdAndUpdate(
+            const oneUser = await UserModel.findByIdAndUpdate( //FIXME No pilla las validaciones como cuando se crea un usuario
                 req.params.id, {
                     name,
                     surname1,
@@ -172,6 +172,8 @@ module.exports = {
                     email,
                     phone_number,
                     zip_code
+                }, {
+                    runValidators: true
                 }
             );
             // console.log(oneUser);
@@ -181,7 +183,7 @@ module.exports = {
             });
         } catch (error) {
             console.log(error);
-            res.send("It has been an error, check that all fields are filled in correctly");
+            res.send("There has been an error, check that all fields are filled in correctly");
         }
     }
 }

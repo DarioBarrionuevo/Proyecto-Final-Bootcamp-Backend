@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     name: {
         type: String,
-        required: [true, 'Name required']
+        required: [true, 'Name required'] //FIXME no encuentro donde salen estos errores o por donde los podria sacar (console log no chuta)- en el update si que salen por consola
     },
     surname1: {
         type: String,
@@ -21,8 +21,8 @@ const userSchema = new Schema({
         required: [true, 'Email required']
     },
     phone_number: {
-        type: Number,
-        match: [/(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}/, 'Please insert a valid phone number'],
+        type: String,
+        match: [/^\(\+\d{2,3}\)\d{9}$/, 'Please insert a valid phone number'], //Format (+xx)xxxxxxxxx
         required: [true, 'Phone number required']
     },
     user_name: {
@@ -36,7 +36,7 @@ const userSchema = new Schema({
     },
     zip_code: {
         type: String,
-        match: [/0[1-9][0-9]{3}|[1-4][0-9]{4}|5[0-2][0-9]{3}/, 'Please insert a valid zip code number'],
+        match: [/^\d{5}$/, 'Please insert a valid zip code number'],
         required: [true, 'Zip code required']
     },
     permits: {
