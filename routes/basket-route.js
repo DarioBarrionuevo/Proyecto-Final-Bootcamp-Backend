@@ -10,11 +10,12 @@ router.post('/createBasket', basketController.createBasket);
 router.get('/getAllBaskets', basketController.getAllBaskets);
 router.get('/getOneBasket/:id', basketController.getOneBasket);
 
-// DELETE DATA
-// I dont want that this app would allow removing baskets, hence the active field
+// DELETE DATA only for admin
+router.delete('/deleteOneBasket/:id', basketController.deleteOneBasket);
 
-// PUT DATA
-// I am not sure how I feel about updating baskets after the creation,for now I will not put this in the app
+
+// PUT DATA only for admin
+router.put('/updateBasket/:id', basketController.updateBasket);
 
 
 module.exports = router;

@@ -10,10 +10,10 @@ router.post('/createOrder', orderController.createOrder);
 router.get('/getAllOrders', orderController.getAllOrders);
 router.get('/getOneOrder/:id', orderController.getOneOrder);
 
-// DELETE DATA
+// DELETE DATA admin
+router.delete('/deleteOrder/:id', orderController.deleteOrder);
 
 // PUT DATA
-
 
 
 

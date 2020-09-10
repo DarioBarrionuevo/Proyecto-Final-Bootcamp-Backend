@@ -16,35 +16,28 @@ module.exports = {
     createOrder: async function (req, res) {
         try {
             const orderInfo = req.body;
-            // console.log("orderInfo", orderInfo)
-            const order1 = new OrderModel();
 
-            // const yoquese = await UserModel.find({
-            //         _id: orderInfo.user_id
-            //     })
-            //     .populate('User')
-            //     .exec((err, posts) => {
-            //         res.send(posts.user_name);
-            //     });
-
-
-            order1.user_id = async function () {
-                await UserModel.find({
-                    _id: orderInfo.user_id
-                }, {
-                    user_name: 1,
-                    _id: 0
+            // Permits
+            const userData = await UserModel.find({
+                _id: orderInfo.user
+            }, {
+                permits: 1,
+            });
+            // console.log("userData", userData);
+            if (!userData[0] || (userData[0].permits !== 'user' && userData[0].permits !== 'admin')) { //entender y hacer en baskets
+                res.status(401).json({
+                    message: 'Permits not enough'
                 });
-
+                return;
             };
 
+            // Create and save in databse
+            const order1 = new OrderModel();
 
-            // order1.user_id = orderInfo.user_id;
+            order1.user = orderInfo.user;
             order1.order_date = new Date();
-            order1.basket_id = orderInfo.basket_id;
-            order1.organization_id = orderInfo.organization_id;
-
-            // console.log("order1", order1)
+            order1.basket = orderInfo.basket;
+            order1.organization = orderInfo.organization;
 
             order1.save((err, savedInfo) => {
                 if (err) throw new Error("Organization created error", err);
@@ -76,8 +69,11 @@ module.exports = {
         try {
             const id = req.params.id;
             const orderInfo = await OrderModel.find({
-                _id: `${id}`,
-            });
+                    _id: `${id}`,
+                }).populate('organization')
+                .populate('user')
+                .populate('basket');
+
             res.status(200).json({
                 message: "Order info",
                 orderInfo: orderInfo,
@@ -86,5 +82,40 @@ module.exports = {
             console.log(error);
             res.status(500).send("It has been an error");
         }
-    }
+    },
+    deleteOrder: async function (req, res) {
+        try {
+            const orderReqInfo = req.body;
+
+            // Permits
+
+            const userData = await UserModel.find({
+                _id: orderReqInfo._id
+            }, {
+                permits: 1,
+            });
+
+            // console.log("userData", userData);
+            if (!userData[0] || userData[0].permits !== 'admin') {
+                res.status(401).json({
+                    message: 'Only admins can do this'
+                });
+                return;
+            };
+
+
+
+            const id = req.params.id;
+            const orderInfo = await OrderModel.findByIdAndDelete({
+                _id: `${id}`,
+            });
+            res.status(200).json({
+                message: "Order removed",
+                orderInfo: orderInfo,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("It has been an error");
+        }
+    },
 }

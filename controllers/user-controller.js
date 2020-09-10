@@ -124,9 +124,6 @@ module.exports = {
             const id = req.params.id;
             console.log("id", id)
 
-            // const userList = await UserModel.findByIdAndDelete({
-            //     _id: `${id}`,
-            // });
             const userList = await UserModel.findByIdAndDelete(id);
             console.log("userList", userList)
             res.status(200).json({

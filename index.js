@@ -5,6 +5,8 @@ const organizationRouter = require('./routes/organization-route');
 const basketRouter = require('./routes/basket-route');
 const orderRouter = require('./routes/order-route');
 const cors = require("cors");
+const authenticate = require('./controllers/authenticate');
+
 
 const app = express();
 
@@ -20,8 +22,8 @@ app.use(express.urlencoded({
 // Routes
 app.use('/users', userRouter);
 app.use('/organizations', organizationRouter);
-app.use('/baskets', basketRouter);
-app.use('/orders', orderRouter);
+app.use('/baskets', authenticate, basketRouter);
+app.use('/orders', authenticate, orderRouter);
 
 
 // Run app

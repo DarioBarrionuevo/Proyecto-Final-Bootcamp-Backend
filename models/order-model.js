@@ -5,10 +5,9 @@ const Schema = mongoose.Schema;
 
 
 const orderSchema = new Schema({
-    user_id: {
+    user: {
         type: ObjectId,
         ref: 'User'
-        //traigo todo y dejo nombre apellidos telefono y correo, cambiar el nombre  a usuario o algo asi
     },
     order_date: {
         type: Date,
@@ -19,11 +18,11 @@ const orderSchema = new Schema({
         default: false,
     },
 
-    basket_id: {
+    basket: {
         type: ObjectId,
         ref: 'Basket'
     },
-    organization_id: {
+    organization: {
         type: ObjectId,
         ref: 'Organization'
     }

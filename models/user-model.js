@@ -42,6 +42,7 @@ const userSchema = new Schema({
     permits: {
         type: String,
         default: 'user',
+        enum: ['user', 'organization']
     }
 
 });
