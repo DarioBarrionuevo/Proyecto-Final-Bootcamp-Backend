@@ -14,6 +14,7 @@ router.get('/getOneOrder/:id', orderController.getOneOrder);
 router.delete('/deleteOrder/:id', orderController.deleteOrder);
 
 // PUT DATA
+router.put('/updateOrder/:id', orderController.updateOrder);
 
 
 

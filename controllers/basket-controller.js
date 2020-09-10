@@ -101,7 +101,7 @@ module.exports = {
                 return;
             };
 
-
+            // Delete
 
             const id = req.params.id;
             const basketInfo = await BasketModel.findByIdAndDelete({

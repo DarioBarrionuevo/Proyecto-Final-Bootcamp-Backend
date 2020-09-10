@@ -126,8 +126,25 @@ module.exports = {
     deleteOneOrganization: async function (req, res) {
         try {
             const id = req.params.id;
-            console.log("id", id)
+            // Permits
+            const userData = await OrganizationModel.find({
+                _id: req.body._id,
+            }, {
+                permits: 1,
+            });
 
+            if (
+                !userData[0] ||
+                (userData[0].permits !== "admin")
+            ) {
+                res.status(401).json({
+                    message: "Only admins can do this",
+                });
+                return;
+            }
+
+
+            // Delete
             const organizationList = await OrganizationModel.findByIdAndDelete(id);
             // console.log("organizationList", organizationList)
             res.status(200).json({

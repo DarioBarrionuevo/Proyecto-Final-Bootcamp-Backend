@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const OrderModel = require("../models/order-model");
 const UserModel = require("../models/user-model");
+const OrganizationModel = require("../models/organization-model");
 // var ObjectId = require("mongodb").ObjectID;
-
 
 // Conection
 mongoose.connect(`mongodb://localhost:27017/${process.env.DDBB_NAME}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
 });
 
 // MAIN
@@ -19,17 +19,21 @@ module.exports = {
 
             // Permits
             const userData = await UserModel.find({
-                _id: orderInfo.user
+                _id: orderInfo.user,
             }, {
                 permits: 1,
             });
             // console.log("userData", userData);
-            if (!userData[0] || (userData[0].permits !== 'user' && userData[0].permits !== 'admin')) { //entender y hacer en baskets
+            if (
+                !userData[0] ||
+                (userData[0].permits !== "user" && userData[0].permits !== "admin")
+            ) {
+                //entender y hacer en baskets
                 res.status(401).json({
-                    message: 'Permits not enough'
+                    message: "Permits not enough",
                 });
                 return;
-            };
+            }
 
             // Create and save in databse
             const order1 = new OrderModel();
@@ -44,10 +48,9 @@ module.exports = {
                 // console.log('order created', savedInfo);
                 res.status(200).json({
                     message: "order created",
-                    orderInfo: savedInfo
+                    orderInfo: savedInfo,
                 });
             });
-
         } catch (error) {
             console.log(error);
             res.status(500).send("It has been an error");
@@ -70,9 +73,10 @@ module.exports = {
             const id = req.params.id;
             const orderInfo = await OrderModel.find({
                     _id: `${id}`,
-                }).populate('organization')
-                .populate('user')
-                .populate('basket');
+                })
+                .populate("organization", "name email phone_number delivey_points")
+                .populate("user", "name surname1 surname2 email phone_number zip_code")
+                .populate("basket", "format content active stock");
 
             res.status(200).json({
                 message: "Order info",
@@ -90,20 +94,20 @@ module.exports = {
             // Permits
 
             const userData = await UserModel.find({
-                _id: orderReqInfo._id
+                _id: orderReqInfo._id,
             }, {
                 permits: 1,
             });
 
             // console.log("userData", userData);
-            if (!userData[0] || userData[0].permits !== 'admin') {
+            if (!userData[0] || userData[0].permits !== "admin") {
                 res.status(401).json({
-                    message: 'Only admins can do this'
+                    message: "Only admins can do this",
                 });
                 return;
-            };
+            }
 
-
+            // Update
 
             const id = req.params.id;
             const orderInfo = await OrderModel.findByIdAndDelete({
@@ -118,4 +122,59 @@ module.exports = {
             res.status(500).send("It has been an error");
         }
     },
-}
+    updateOrder: async function (req, res) {
+        try {
+            // const basketReqInfo = req.body;
+            const {
+                _id,
+                user,
+                paid,
+                basket,
+                organization
+            } = req.body;
+
+            // Permits
+            const userData = await OrganizationModel.find({
+                _id: _id,
+            }, {
+                permits: 1,
+            });
+
+            if (
+                !userData[0] ||
+                (userData[0].permits !== "organization" &&
+                    userData[0].permits !== "admin")
+            ) {
+                res.status(401).json({
+                    message: "Only admins and users can do this",
+                });
+                return;
+            }
+
+            // Update
+            // const creation_date = new Date(); I am leaning towars not including this feature in the update,order date must be the same and original one
+            const oneOrder = await OrderModel.findByIdAndUpdate(req.params.id, {
+                    user,
+                    paid, //FIXME en la res aparecen  lo que estaba ya,no lo que se pasa en todos los campos/igual hay que volver a hacer la busqueda de la order y meterla en la res
+                    basket,
+                    organization,
+                })
+                .populate("organization", "name email phone_number delivey_points")
+                .populate("user", "name surname1 surname2 email phone_number zip_code")
+                .populate("basket", "format content active stock");
+
+            // console.log(oneOrder);
+            res.status(200).json({
+                message: "Order updated",
+                orderInfo: oneOrder,
+            });
+        } catch (error) {
+            console.log(error);
+            res
+                .status(500)
+                .send(
+                    "It has been an error, check that all fields are filled in correctly"
+                );
+        }
+    },
+};

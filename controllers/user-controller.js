@@ -122,8 +122,25 @@ module.exports = {
     deleteOneUser: async function (req, res) {
         try {
             const id = req.params.id;
-            console.log("id", id)
 
+            // Permits
+            const userData = await UserModel.find({
+                _id: req.body._id,
+            }, {
+                permits: 1,
+            });
+
+            if (
+                !userData[0] ||
+                (userData[0].permits !== "admin")
+            ) {
+                res.status(401).json({
+                    message: "Only admins can do this",
+                });
+                return;
+            }
+
+            // Delete
             const userList = await UserModel.findByIdAndDelete(id);
             console.log("userList", userList)
             res.status(200).json({
