@@ -151,12 +151,18 @@ module.exports = {
                     active,
                     stock,
                     creation_date
+                }, {
+                    runValidators: true
                 }
             );
             // console.log(oneBasket);
+
+            // tryng to respond with the actual order uptated
+            const oneBasketUpdated = await BasketModel.findById(req.params.id, {})
+
             res.status(200).json({
                 message: "Basket updated",
-                basketInfo: oneBasket,
+                basketInfo: oneBasketUpdated,
             });
 
 

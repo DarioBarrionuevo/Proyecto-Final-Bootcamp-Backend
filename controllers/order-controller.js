@@ -19,7 +19,7 @@ module.exports = {
 
             // Permits
             const userData = await UserModel.find({
-                _id: orderInfo.user,
+                _id: orderInfo._id,
             }, {
                 permits: 1,
             });
@@ -146,27 +146,34 @@ module.exports = {
                     userData[0].permits !== "admin")
             ) {
                 res.status(401).json({
-                    message: "Only admins and users can do this",
+                    message: "Only admins and organizations can do this",
                 });
                 return;
             }
 
             // Update
+            // FIXME Intentar que si se pone el campo vacio se rellene con lo que ya está actualmente, supongo que con un if/ lo puedo hacer desde el front 
+
             // const creation_date = new Date(); I am leaning towars not including this feature in the update,order date must be the same and original one
             const oneOrder = await OrderModel.findByIdAndUpdate(req.params.id, {
-                    user,
-                    paid, //FIXME en la res aparecen  lo que estaba ya,no lo que se pasa en todos los campos/igual hay que volver a hacer la busqueda de la order y meterla en la res
-                    basket,
-                    organization,
-                })
-                .populate("organization", "name email phone_number delivey_points")
+                user,
+                paid,
+                basket,
+                organization,
+            }, {
+                runValidators: true
+            })
+
+            // tryng to respond with the actual order uptated
+            const oneOrderUpdated = await OrderModel.findById(req.params.id, {}).populate("organization", "name email phone_number delivey_points")
                 .populate("user", "name surname1 surname2 email phone_number zip_code")
                 .populate("basket", "format content active stock");
+
 
             // console.log(oneOrder);
             res.status(200).json({
                 message: "Order updated",
-                orderInfo: oneOrder,
+                orderInfo: oneOrderUpdated,
             });
         } catch (error) {
             console.log(error);

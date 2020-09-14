@@ -156,6 +156,7 @@ module.exports = {
     },
     updateUser: async function (req, res) {
         try {
+            const user_name = req.user_name; //lo he sacado del token, viene del middleware authenticate
             const {
                 name,
                 surname1,
@@ -164,15 +165,38 @@ module.exports = {
                 phone_number,
                 zip_code
             } = req.body;
-            const oneUser = await UserModel.findByIdAndUpdate( //FIXME No pilla las validaciones como cuando se crea un usuario
-                req.params.id, {
-                    name,
-                    surname1,
-                    surname2,
-                    email,
-                    phone_number,
-                    zip_code
-                }, {
+
+
+            // PErmiso si es el mismo usuario o si es admin 
+
+
+            // me llega la petición y me piden que actualice datos del siguiente userId
+            const userIdToUpdate = req.params.id;
+
+            const userToUpdate = await User.findById(userIdToUpdate);
+            if (userToUpdate.user_name !== user_name) {
+                res.send('No puedes');
+                return;
+            }
+
+            const userFromToken = await User.find({
+                user_name: user_name
+            });
+            if (userFromToken.permits !== 'admin') {
+                res.send('No puedes');
+                return;
+            }
+
+            const dataToUpdate = {}; //FIXME Comprobar que funciona si no metes todo no te lo sobreescribe ñaidr password
+            name ? dataToUpdate.name = name : null;
+            surname1 ? dataToUpdate.surname1 = surname1 : null;
+            surname2 ? dataToUpdate.surname2 = surname2 : null;
+            email ? dataToUpdate.email = email : null;
+            phone_number ? dataToUpdate.phone_number = phone_number : null;
+            zip_code ? dataToUpdate.zip_code = zip_code : null;
+
+            const oneUser = await UserModel.findByIdAndUpdate(
+                req.params.id, dataToUpdate, {
                     runValidators: true
                 }
             );

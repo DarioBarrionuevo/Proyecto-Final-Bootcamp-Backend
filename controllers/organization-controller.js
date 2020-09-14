@@ -21,7 +21,7 @@ module.exports = {
 
             organization1.name = organizationInfo.name;
             organization1.address = organizationInfo.address;
-            organization1.cif = organizationInfo.cif;
+            organization1.nif = organizationInfo.nif;
             organization1.email = organizationInfo.email;
             organization1.phone_number = organizationInfo.phone_number;
             organization1.user_name = organizationInfo.user_name;
@@ -32,7 +32,7 @@ module.exports = {
             organization1.password = encryptedPassword;
 
             organization1.save((err, savedInfo) => {
-                if (err) throw new Error("Organization created error XX", err);
+                if (err) throw new Error("Organization created error", err);
                 // console.log('Organization created', savedInfo);
                 res.status(200).json({
                     message: "Organization created",
@@ -51,12 +51,12 @@ module.exports = {
                 user_name,
                 password
             } = req.body;
-            console.log("req.body", req.body);
+            // console.log("req.body", req.body);
 
             const organizationData = await OrganizationModel.find({
                 user_name
             });
-            console.log("organizationData", organizationData);
+            // console.log("organizationData", organizationData);
             if (!organizationData) {
                 res.status(401).json({
                     message: "User name or password incorrect",
@@ -147,6 +147,9 @@ module.exports = {
             // Delete
             const organizationList = await OrganizationModel.findByIdAndDelete(id);
             // console.log("organizationList", organizationList)
+            if (!organizationList) {
+                res.send("This is not a valid organization"); //TODO poner lo mismo en los demas deletes, si se intenta borrar algo ya borrado que aparezca mensaje diciendo que no existe en vez de info vacía
+            }
             res.status(200).json({
                 message: "Organization has been deleted",
                 organizationInfo: organizationList,
@@ -163,7 +166,7 @@ module.exports = {
             const {
                 name,
                 address,
-                cif,
+                nif,
                 email,
                 phone_number,
                 delivery_points
@@ -172,13 +175,15 @@ module.exports = {
                 req.params.id, {
                     name,
                     address,
-                    cif,
+                    nif,
                     email,
                     phone_number,
                     delivery_points
+                }, {
+                    runValidators: true
                 }
             );
-            console.log(oneOrganization);
+            // console.log(oneOrganization);
             res.status(200).json({
                 message: "Organization updated",
                 organizationInfo: req.body,

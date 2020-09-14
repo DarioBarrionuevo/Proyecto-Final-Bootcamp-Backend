@@ -10,10 +10,10 @@ const organizationSchema = new Schema({
         type: String,
         required: [true, 'Address required']
     },
-    cif: {
+    nif: { //1 letter and 8 digits
         type: String,
-        match: [/^[a-zA-Z]{1}\d{7}[a-zA-Z0-9]{1}$/, 'Please insert a valid CIF'],
-        required: [true, 'CIF required']
+        match: [/^[a-zA-Z]{1}\d{7}[a-zA-Z0-9]{1}$/, 'Please insert a valid nif'],
+        required: [true, 'nif required']
     },
     email: {
         type: String,
@@ -21,22 +21,21 @@ const organizationSchema = new Schema({
         required: [true, 'Email required']
     },
     phone_number: {
-        type: Number,
-        match: [/(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}/, 'Please insert a valid phone number'],
+        type: String,
+        match: [/^\(\+\d{2,3}\)\d{9}$/, 'Please insert a valid phone number'], //Format (+xx)xxxxxxxxx
         required: [true, 'Phone number required']
     },
-    user_name: {
+    user_name: { //FIXME en user no me deja repetir el nombre de usuario y en organization si, unique no es un validator per se En el controller hacer un find y si existe devuelvo q no se puede crear
         type: String,
         unique: [true, 'User name is duplicated'],
         required: [true, 'User name required']
     },
-    password: {
+    password: { //FIXMECorreo de recuperacion de contraseña implica el update tanto en usuario como en organizacion?
         type: String,
         required: [true, 'Password required']
     },
     delivery_points: {
         type: Array,
-        required: [true, 'Delivery points required']
     },
     permits: {
         type: String,

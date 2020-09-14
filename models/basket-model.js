@@ -20,7 +20,10 @@ const basketSchema = new Schema({
         type: Date,
         required: [true, 'Date required']
     },
-    stock: Number
+    stock: {
+        type: Number,
+        required: [true, 'Stock required']
+    },
 
 });
 module.exports = mongoose.model('Basket', basketSchema);
