@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+var ObjectId = require("mongodb").ObjectID;
+
 const Schema = mongoose.Schema;
 
 
@@ -9,7 +11,7 @@ const basketSchema = new Schema({
         required: [true, 'Format required']
     },
     content: {
-        type: Array,
+        type: String,
         required: [true, 'Content required']
     },
     active: {
@@ -24,6 +26,10 @@ const basketSchema = new Schema({
         type: Number,
         required: [true, 'Stock required']
     },
+    organization: {
+        type: ObjectId,
+        ref: 'Organization'
+    }
 
 });
 module.exports = mongoose.model('Basket', basketSchema);

@@ -9,6 +9,8 @@ router.post('/createOrder', orderController.createOrder);
 // GET DATA
 router.get('/getAllOrders', orderController.getAllOrders);
 router.get('/getOneOrder/:id', orderController.getOneOrder);
+router.get('/getOrdersByOrganization/:id', orderController.getOrdersByOrganization);
+router.get('/getOrdersByUser/:id', orderController.getOrdersByUser);
 
 // DELETE DATA admin
 router.delete('/deleteOrder/:id', orderController.deleteOrder);

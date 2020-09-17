@@ -9,6 +9,7 @@ router.post('/createBasket', basketController.createBasket);
 // GET DATA
 router.get('/getAllBaskets', basketController.getAllBaskets);
 router.get('/getOneBasket/:id', basketController.getOneBasket);
+router.get('/getBasketsByOrganization/:id', basketController.getBasketsByOrganization);
 
 // DELETE DATA only for admin
 router.delete('/deleteOneBasket/:id', basketController.deleteOneBasket);

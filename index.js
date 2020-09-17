@@ -5,6 +5,7 @@ const organizationRouter = require('./routes/organization-route');
 const basketRouter = require('./routes/basket-route');
 const orderRouter = require('./routes/order-route');
 const cors = require("cors");
+const morgan = require('morgan');
 const authenticate = require('./controllers/authenticate');
 
 
@@ -13,6 +14,7 @@ const app = express();
 app.set('port', 3000);
 
 // Middlewares
+app.use(morgan());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({

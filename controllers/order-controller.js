@@ -58,7 +58,9 @@ module.exports = {
     },
     getAllOrders: async function (req, res) {
         try {
-            const orderList = await OrderModel.find();
+            const orderList = await OrderModel.find().populate("organization", "name email phone_number delivey_points")
+                .populate("user", "name surname1 surname2 email phone_number zip_code")
+                .populate("basket", "format content active stock");
             // console.log("orderList", orderList);
             res.status(200).json({
                 ...orderList,
@@ -80,6 +82,48 @@ module.exports = {
 
             res.status(200).json({
                 message: "Order info",
+                orderInfo: orderInfo,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("It has been an error");
+        }
+    },
+    getOrdersByOrganization: async function (req, res) {
+        try {
+            const id = req.params.id;
+            console.log("id", id)
+            const orderInfo = await OrderModel.find({
+                    organization: `${id}`,
+                })
+                .populate("organization", "name email phone_number delivey_points")
+                .populate("user", "name surname1 surname2 email phone_number zip_code")
+                .populate("basket", "format content active stock");
+            console.log("orderInfo", orderInfo)
+
+            res.status(200).json({
+                message: "Order by organization info",
+                orderInfo: orderInfo,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("It has been an error");
+        }
+    },
+    getOrdersByUser: async function (req, res) {
+        try {
+            const id = req.params.id;
+            // console.log("id", id)
+            const orderInfo = await OrderModel.find({
+                    user: `${id}`,
+                })
+                .populate("organization", "name email phone_number delivey_points")
+                .populate("user", "name surname1 surname2 email phone_number zip_code")
+                .populate("basket", "format content active stock");
+            // console.log("orderInfo", orderInfo)
+
+            res.status(200).json({
+                message: "Order by userinfo",
                 orderInfo: orderInfo,
             });
         } catch (error) {

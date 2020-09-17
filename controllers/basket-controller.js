@@ -40,6 +40,7 @@ module.exports = {
             basket1.content = basketInfo.content;
             basket1.creation_date = new Date();
             basket1.stock = basketInfo.stock;
+            basket1.organization = basketInfo.organization;
 
             basket1.save((err, savedInfo) => {
                 if (err) throw new Error("Organization created error", err);
@@ -74,6 +75,21 @@ module.exports = {
             });
             res.status(200).json({
                 message: "Basket info",
+                basketInfo: basketInfo,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("It has been an error");
+        }
+    },
+    getBasketsByOrganization: async function (req, res) {
+        try {
+            const id = req.params.id;
+            const basketInfo = await BasketModel.find({
+                organization: `${id}`,
+            });
+            res.status(200).json({
+                message: "Basket by organization info",
                 basketInfo: basketInfo,
             });
         } catch (error) {
@@ -126,6 +142,7 @@ module.exports = {
                 content,
                 active,
                 stock,
+                organization
             } = req.body;
 
             // Permits
@@ -150,6 +167,7 @@ module.exports = {
                     content,
                     active,
                     stock,
+                    organization,
                     creation_date
                 }, {
                     runValidators: true
