@@ -99,6 +99,22 @@ module.exports = {
             res.status(500).send("It has been an error");
         }
     },
+    getBasketssActiveByOrganization: async function (req, res) {
+        try {
+            const id = req.params.id;
+            const basketInfo = await BasketModel.find({
+                organization: `${id}`,
+                active: true
+            });
+            res.status(200).json({
+                message: "Basket by organization info",
+                basketInfo: basketInfo,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("It has been an error");
+        }
+    },
     deleteOneBasket: async function (req, res) {
         try {
             const basketReqInfo = req.body;

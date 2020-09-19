@@ -111,6 +111,7 @@ module.exports = {
             res.status(500).send("It has been an error");
         }
     },
+
     getOrdersByUser: async function (req, res) {
         try {
             const id = req.params.id;
