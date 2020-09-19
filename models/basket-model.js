@@ -29,7 +29,11 @@ const basketSchema = new Schema({
     organization: {
         type: ObjectId,
         ref: 'Organization'
-    }
+    },
+    price: {
+        type: Number,
+        required: [true, 'Price required']
+    },
 
 });
 module.exports = mongoose.model('Basket', basketSchema);

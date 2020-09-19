@@ -16,7 +16,8 @@ module.exports = {
     createOrder: async function (req, res) {
         try {
             const orderInfo = req.body;
-
+            // const date = new Date();
+            // const formatedDate = date.getFullYear() - date.getMonth() - date.getDay() + ' , ' + date.getHours() - date.getMinutes() - date.getSeconds()
             // Permits
             const userData = await UserModel.find({
                 _id: orderInfo._id,
@@ -98,7 +99,7 @@ module.exports = {
                 })
                 .populate("organization", "name email phone_number delivey_points")
                 .populate("user", "name surname1 surname2 email phone_number zip_code")
-                .populate("basket", "format content active stock");
+                .populate("basket", "format content active stock price");
             console.log("orderInfo", orderInfo)
 
             res.status(200).json({
@@ -119,7 +120,7 @@ module.exports = {
                 })
                 .populate("organization", "name email phone_number delivey_points")
                 .populate("user", "name surname1 surname2 email phone_number zip_code")
-                .populate("basket", "format content active stock");
+                .populate("basket", "format content active stock price");
             // console.log("orderInfo", orderInfo)
 
             res.status(200).json({
@@ -174,6 +175,7 @@ module.exports = {
                 user,
                 paid,
                 basket,
+                price,
                 organization
             } = req.body;
 
@@ -211,7 +213,7 @@ module.exports = {
             // tryng to respond with the actual order uptated
             const oneOrderUpdated = await OrderModel.findById(req.params.id, {}).populate("organization", "name email phone_number delivey_points")
                 .populate("user", "name surname1 surname2 email phone_number zip_code")
-                .populate("basket", "format content active stock");
+                .populate("basket", "format content active stock price");
 
 
             // console.log(oneOrder);

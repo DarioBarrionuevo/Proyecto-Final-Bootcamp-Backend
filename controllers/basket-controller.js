@@ -41,6 +41,8 @@ module.exports = {
             basket1.creation_date = new Date();
             basket1.stock = basketInfo.stock;
             basket1.organization = basketInfo.organization;
+            basket1.price = basketInfo.price;
+
 
             basket1.save((err, savedInfo) => {
                 if (err) throw new Error("Organization created error", err);
@@ -142,7 +144,8 @@ module.exports = {
                 content,
                 active,
                 stock,
-                organization
+                organization,
+                price
             } = req.body;
 
             // Permits
@@ -168,6 +171,7 @@ module.exports = {
                     active,
                     stock,
                     organization,
+                    price,
                     creation_date
                 }, {
                     runValidators: true
