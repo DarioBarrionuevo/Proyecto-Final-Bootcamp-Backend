@@ -4,6 +4,7 @@ const userRouter = require('./routes/user-route');
 const organizationRouter = require('./routes/organization-route');
 const basketRouter = require('./routes/basket-route');
 const orderRouter = require('./routes/order-route');
+const emailRouter = require('./routes/email-route');
 const cors = require("cors");
 const morgan = require('morgan');
 const authenticate = require('./controllers/authenticate');
@@ -26,6 +27,8 @@ app.use('/users', userRouter);
 app.use('/organizations', organizationRouter);
 app.use('/baskets', authenticate, basketRouter);
 app.use('/orders', authenticate, orderRouter);
+app.use('/email', emailRouter);
+
 
 
 // Run app
