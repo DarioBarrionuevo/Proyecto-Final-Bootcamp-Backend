@@ -16,7 +16,7 @@ const basketSchema = new Schema({
     },
     active: {
         type: Boolean,
-        default: false,
+        default: true,
     },
     creation_date: {
         type: Date,

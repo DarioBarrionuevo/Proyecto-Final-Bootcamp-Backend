@@ -10,9 +10,9 @@ const organizationSchema = new Schema({
         type: String,
         required: [true, 'Address required']
     },
-    nif: { //1 letter and 8 digits
+    nif: { //nif, nie, cif
         type: String,
-        match: [/^[a-zA-Z]{1}\d{7}[a-zA-Z0-9]{1}$/, 'Please insert a valid nif'],
+        match: [/^(X(-|\.)?0?\d{7}(-|\.)?[A-Z]|[A-Z](-|\.)?\d{7}(-|\.)?[0-9A-Z]|\d{8}(-|\.)?[A-Z])$/, 'Please insert a valid nif'],
         required: [true, 'nif required']
     },
     email: {

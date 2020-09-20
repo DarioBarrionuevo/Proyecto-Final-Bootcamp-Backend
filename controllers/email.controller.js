@@ -17,16 +17,15 @@ module.exports = {
             var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'dariobafran@gmail.com',
+                user: 'BasketsConsumerPlatform@gmail.com',
                 pass: process.env.EMAIL_PASSWORD
             }
             });
 
             // Creating the mail with the body
             var mailOptions = {
-            from: 'dariobafran@gmail.com',
-            // to: `${allInfo.organization_email}`,  graciela.og85@gmail.com
-            to: 'graciela.og85@gmail.com', 
+            from: 'BasketsConsumerPlatform@gmail.com',
+            to: `${allInfo.organization_email}`,
             subject: 'Solicitud de pedido desde Consumer Platform App!',
             // plaintext body
             // text: 'Hello to myself!',
