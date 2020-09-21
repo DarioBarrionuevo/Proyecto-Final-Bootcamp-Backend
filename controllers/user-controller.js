@@ -4,7 +4,10 @@ const bcrypt = require("bcryptjs");
 const UserModel = require("../models/user-model");
 
 // Conection
-mongoose.connect(`mongodb://localhost:27017/${process.env.DDBB_NAME}`, {
+// mongoose.connect(`mongodb://localhost:27017/${process.env.DDBB_NAME}`, {
+
+mongoose.connect(`mongodb+srv://dario:${process.env.ATLAS_PASSWORD}@basketconsumerplatform.fffcd.azure.mongodb.net/${process.env.DDBB_NAME}?retryWrites=true&w=majority`, {
+
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
@@ -46,7 +49,10 @@ module.exports = {
   },
   userLogin: async function (req, res) {
     try {
-      const { user_name, password } = req.body;
+      const {
+        user_name,
+        password
+      } = req.body;
 
       const userData = await UserModel.find({
         user_name,
@@ -70,12 +76,10 @@ module.exports = {
         });
         return;
       }
-      const token = jwt.sign(
-        {
+      const token = jwt.sign({
           user_name,
         },
-        process.env.SECRET,
-        {
+        process.env.SECRET, {
           expiresIn: 60 * 60 * 24,
         }
       );
@@ -123,14 +127,11 @@ module.exports = {
       const id = req.params.id;
 
       // Permits
-      const userData = await UserModel.find(
-        {
-          _id: req.body._id,
-        },
-        {
-          permits: 1,
-        }
-      );
+      const userData = await UserModel.find({
+        _id: req.body._id,
+      }, {
+        permits: 1,
+      });
 
       if (!userData[0] || userData[0].permits !== "admin") {
         res.status(401).json({
@@ -192,8 +193,7 @@ module.exports = {
 
       const oneUser = await UserModel.findByIdAndUpdate(
         req.params.id,
-        dataToUpdate,
-        {
+        dataToUpdate, {
           runValidators: true,
         }
       );
