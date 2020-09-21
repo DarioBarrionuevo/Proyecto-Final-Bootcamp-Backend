@@ -34,4 +34,4 @@ app.get('/', (req, res) => {
 });
 
 // Run app
-app.listen(app.get('port'), () => console.log('Running on ', app.get('port')));
+app.listen(process.env.PORT || app.get('port'), () => console.log('Running on ', app.get('port')));
