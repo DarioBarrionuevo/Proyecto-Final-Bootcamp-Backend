@@ -29,7 +29,9 @@ app.use('/baskets', authenticate, basketRouter);
 app.use('/orders', authenticate, orderRouter);
 app.use('/email', emailRouter);
 
-
+app.get('/', (req, res) => {
+    res.send('Todo ok!');
+});
 
 // Run app
 app.listen(app.get('port'), () => console.log('Running on ', app.get('port')));
