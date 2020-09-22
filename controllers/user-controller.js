@@ -3,9 +3,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const UserModel = require("../models/user-model");
 
-// Conection
+// Conection local
 // mongoose.connect(`mongodb://localhost:27017/${process.env.DDBB_NAME}`, {
 
+// connection Atlas
 mongoose.connect(`mongodb+srv://dario:${process.env.ATLAS_PASSWORD}@basketconsumerplatform.fffcd.azure.mongodb.net/${process.env.DDBB_NAME}?retryWrites=true&w=majority`, {
 
   useNewUrlParser: true,
@@ -57,6 +58,7 @@ module.exports = {
       const userData = await UserModel.find({
         user_name,
       });
+      console.log("userData", userData)
       const _id = userData[0]._id;
       console.log("userData", _id);
       if (!userData) {
